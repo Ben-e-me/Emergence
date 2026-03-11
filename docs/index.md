@@ -30,4 +30,3 @@ The live experience is deployed via GitHub Pages from the `main` branch.
 - [Architecture](./architecture.md) – data structures, hooks, and render pipeline.
 - [Changelog](./CHANGELOG.md) – version history following Keep a Changelog.
 - [Decisions](./DECISIONS.md) – structured log of design and technical decisions.
-

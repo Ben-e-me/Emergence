@@ -68,12 +68,7 @@ export function LifeCanvas() {
         const index = y * width + x;
         if (grid[index] === 1) {
           context.globalAlpha = Math.min(1, 0.3 + ages[index] * 0.02);
-          context.fillRect(
-            x * cellSizeCss,
-            y * cellSizeCss,
-            cellSizeCss,
-            cellSizeCss,
-          );
+          context.fillRect(x * cellSizeCss, y * cellSizeCss, cellSizeCss, cellSizeCss);
         }
       }
     }
@@ -81,4 +76,3 @@ export function LifeCanvas() {
 
   return <canvas ref={canvasRef} className={styles.canvas} aria-label="Game of Life universe" />;
 }
-

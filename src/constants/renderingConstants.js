@@ -20,4 +20,3 @@ export const TARGET_CELLS_ON_SHORT_AXIS = 72;
  * on very large or dense displays.
  */
 export const MAX_CELLS_PER_AXIS = 220;
-

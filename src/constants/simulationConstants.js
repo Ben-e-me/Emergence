@@ -47,4 +47,3 @@ export const RULE_DEAD_UNIVERSE = {
   born: [2],
   survive: [],
 };
-

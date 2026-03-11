@@ -13,7 +13,9 @@ import { RULE_CONWAY_CLASSIC } from '../../src/constants/simulationConstants.js'
 describe('useGameOfLife', () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    vi.spyOn(global, 'requestAnimationFrame').mockImplementation((cb) => setTimeout(() => cb(performance.now()), 16));
+    vi.spyOn(global, 'requestAnimationFrame').mockImplementation((cb) =>
+      setTimeout(() => cb(performance.now()), 16),
+    );
     vi.spyOn(global, 'cancelAnimationFrame').mockImplementation((id) => clearTimeout(id));
   });
 
@@ -63,4 +65,3 @@ describe('useGameOfLife', () => {
     expect(next[2 * 3 + 1]).toBe(1);
   });
 });
-

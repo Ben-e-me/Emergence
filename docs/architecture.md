@@ -45,4 +45,3 @@ Wraps detection utilities from `src/simulation` to identify still lifes, oscilla
 ### `useAccentColor`
 
 Manages the user-configurable accent color, persisting preference to `localStorage` while falling back to the design system default.
-

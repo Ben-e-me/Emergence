@@ -41,7 +41,10 @@ export function useViewportGrid() {
 
       const shortAxisDevice = Math.min(vw, vh) * dpr;
       const idealCellDeviceSize = shortAxisDevice / TARGET_CELLS_ON_SHORT_AXIS;
-      const cellDeviceSize = Math.max(MIN_DEVICE_PIXELS_PER_CELL, Math.floor(idealCellDeviceSize) || 1);
+      const cellDeviceSize = Math.max(
+        MIN_DEVICE_PIXELS_PER_CELL,
+        Math.floor(idealCellDeviceSize) || 1,
+      );
 
       const widthCells = Math.min(
         MAX_CELLS_PER_AXIS,
@@ -68,4 +71,3 @@ export function useViewportGrid() {
 
   return grid;
 }
-

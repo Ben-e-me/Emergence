@@ -21,4 +21,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Project structure for hooks, components, simulation, constants, utils, styles, tests, and docs.
 - Global design tokens (colors, typography, motion) aligned with the visual direction.
 - Documentation skeleton, including architecture and decision log.
-

@@ -148,15 +148,7 @@ export function useGameOfLife(options = {}) {
     const front = frontUniverseRef.current;
     const back = backUniverseRef.current;
 
-    stepUniverse(
-      front.grid,
-      front.ages,
-      back.grid,
-      back.ages,
-      width,
-      height,
-      rule,
-    );
+    stepUniverse(front.grid, front.ages, back.grid, back.ages, width, height, rule);
 
     // Swap buffers to reuse existing allocations on the next frame and align view state.
     frontUniverseRef.current = back;
@@ -226,4 +218,3 @@ export function useGameOfLife(options = {}) {
     reset,
   };
 }
-

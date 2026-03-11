@@ -20,4 +20,3 @@
 ## Feature
 
 - **Session-based evolution** – The experience will grow in sessions, starting with a core visualization and layering narrative, presets, and pattern exploration over time.
-
