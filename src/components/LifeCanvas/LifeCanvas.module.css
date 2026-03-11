@@ -1,0 +1,12 @@
+/**
+ * @file LifeCanvas.module.css
+ * @description Styling for the LifeCanvas component area.
+ * @architecture
+ * - Ensures the canvas fills its parent with a smooth, material-inspired presence.
+ */
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 18px;
+}

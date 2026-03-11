@@ -1,0 +1,33 @@
+<!doctype html>
+<!--
+  @file index.html
+  @description Root HTML document for the Emergence experience. Hosts the React app and global font imports.
+  @architecture Notes:
+  - Loads Inter and JetBrains Mono from Google Fonts for consistent typography.
+  - Vite injects the React bundle via the #root element and the main.jsx entry.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Emergence — Conway's Game of Life</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Emergence — an interactive, spiritual visualization of Conway's Game of Life exploring the principle of emergence."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Preconnects improve font loading performance for the primary text system. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Inter for UI and display, JetBrains Mono for counters and seed labels. -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+  </html>
+
