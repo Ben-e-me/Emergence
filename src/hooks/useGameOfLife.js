@@ -128,10 +128,13 @@ export function useGameOfLife(options = {}) {
   } = options;
 
   const [isRunning, setIsRunning] = useState(autoStart);
-  const [tick, setTick] = useState(0);
 
   const frontUniverseRef = useRef(createUniverse(width, height));
   const backUniverseRef = useRef(createUniverse(width, height));
+
+  /* eslint react-hooks/refs: "off" */
+  const [gridView, setGridView] = useState(() => frontUniverseRef.current.grid);
+  const [agesView, setAgesView] = useState(() => frontUniverseRef.current.ages);
 
   const targetDeltaMs = useMemo(
     () => (generationsPerSecond > 0 ? 1000 / generationsPerSecond : Number.POSITIVE_INFINITY),
@@ -155,10 +158,11 @@ export function useGameOfLife(options = {}) {
       rule,
     );
 
-    // Swap buffers to reuse existing allocations on the next frame and trigger a React update.
+    // Swap buffers to reuse existing allocations on the next frame and align view state.
     frontUniverseRef.current = back;
     backUniverseRef.current = front;
-    setTick((value) => value + 1);
+    setGridView(frontUniverseRef.current.grid);
+    setAgesView(frontUniverseRef.current.ages);
   }, [height, rule, width]);
 
   const reset = useCallback((seedInitializer) => {
@@ -173,6 +177,8 @@ export function useGameOfLife(options = {}) {
     if (seedInitializer) {
       seedInitializer(front.grid);
     }
+    setGridView(front.grid);
+    setAgesView(front.ages);
   }, []);
 
   const toggleRunning = useCallback(() => {
@@ -211,13 +217,9 @@ export function useGameOfLife(options = {}) {
     };
   }, [isRunning, step, targetDeltaMs]);
 
-  const immutableGrid = useMemo(() => frontUniverseRef.current.grid, [tick]);
-
-  const immutableAges = useMemo(() => frontUniverseRef.current.ages, [tick]);
-
   return {
-    grid: immutableGrid,
-    ages: immutableAges,
+    grid: gridView,
+    ages: agesView,
     isRunning,
     step,
     toggleRunning,
