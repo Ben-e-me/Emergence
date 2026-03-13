@@ -4,6 +4,7 @@
  * @architecture
  * - Holds the Uint8Array grid and Uint16Array ages, but exposes them as read-only to callers.
  * - Uses a requestAnimationFrame loop with frame-delta timing to maintain consistent speed.
+ * - Delegates the pure step logic to src/simulation/universe.js.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -12,6 +13,7 @@ import {
   DEFAULT_GRID_WIDTH,
   RULE_CONWAY_CLASSIC,
 } from '../constants/simulationConstants.js';
+import { stepUniverse } from '../simulation/universe.js';
 
 /**
  * @typedef {{ born: number[]; survive: number[] }} RulePreset
@@ -50,66 +52,6 @@ function createUniverse(width, height) {
     grid: new Uint8Array(size),
     ages: new Uint16Array(size),
   };
-}
-
-/**
- * Produces the next generation for the given universe in-place.
- * This uses double-buffering to avoid allocating new arrays each frame.
- *
- * @param {Uint8Array} currentGrid
- * @param {Uint16Array} currentAges
- * @param {Uint8Array} nextGrid
- * @param {Uint16Array} nextAges
- * @param {number} width
- * @param {number} height
- * @param {RulePreset} rule
- */
-function stepUniverse(currentGrid, currentAges, nextGrid, nextAges, width, height, rule) {
-  const { born, survive } = rule;
-
-  // Precompute lookups so we do not allocate or search arrays for each cell.
-  const bornMask = new Set(born);
-  const surviveMask = new Set(survive);
-
-  for (let y = 0; y < height; y += 1) {
-    for (let x = 0; x < width; x += 1) {
-      const index = y * width + x;
-      const isAlive = currentGrid[index] === 1;
-
-      let neighbors = 0;
-      // Neighbourhood offsets are unrolled for clarity and to avoid array allocations.
-      for (let dy = -1; dy <= 1; dy += 1) {
-        for (let dx = -1; dx <= 1; dx += 1) {
-          if (dx === 0 && dy === 0) continue;
-          const nx = x + dx;
-          const ny = y + dy;
-          if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue;
-          const nIndex = ny * width + nx;
-          if (currentGrid[nIndex] === 1) {
-            neighbors += 1;
-          }
-        }
-      }
-
-      if (isAlive) {
-        if (surviveMask.has(neighbors)) {
-          nextGrid[index] = 1;
-          nextAges[index] = /** @type {number} */ (currentAges[index] + 1);
-        } else {
-          nextGrid[index] = 0;
-          nextAges[index] = 0;
-        }
-      } else {
-        if (bornMask.has(neighbors)) {
-          nextGrid[index] = 1;
-          nextAges[index] = 1;
-        } else {
-          nextGrid[index] = 0;
-          nextAges[index] = 0;
-        }
-      }
-    }
-  }
 }
 
 /**

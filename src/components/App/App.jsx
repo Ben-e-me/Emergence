@@ -11,6 +11,7 @@ import styles from './App.module.css';
 import { LifeCanvas } from '../LifeCanvas/LifeCanvas.jsx';
 import { useGameOfLife } from '../../hooks/useGameOfLife.js';
 import { useViewportGrid } from '../../hooks/useViewportGrid.js';
+import { useAccentColor } from '../../hooks/useAccentColor.js';
 import { randomSeed } from '../../simulation/seeds.js';
 import {
   DEFAULT_GENERATIONS_PER_SECOND,
@@ -27,11 +28,21 @@ const RULE_PRESETS = [
   { key: 'dead', label: 'Dead', rule: RULE_DEAD_UNIVERSE },
 ];
 
+const ACCENT_SWATCHES = [
+  { color: '#7b61ff', label: 'Violet' },
+  { color: '#00ffbc', label: 'Cyan' },
+  { color: '#ff6b6b', label: 'Coral' },
+  { color: '#ffd700', label: 'Gold' },
+  { color: '#60a5fa', label: 'Sky' },
+  { color: '#f472b6', label: 'Pink' },
+];
+
 /**
  * @returns {JSX.Element} The root application shell hosting the canvas and narrative panels.
  */
 export function App() {
   const { width, height, cellSizeCss } = useViewportGrid();
+  const [accentColor, setAccentColor] = useAccentColor();
 
   const [generationsPerSecond, setGenerationsPerSecond] = useState(DEFAULT_GENERATIONS_PER_SECOND);
   const [activeRuleKey, setActiveRuleKey] = useState('classic');
@@ -103,6 +114,24 @@ export function App() {
                 >
                   {label}
                 </button>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.controlGroup}>
+            <div className={styles.controlLabel}>
+              <span>Color</span>
+            </div>
+            <div className={styles.swatches}>
+              {ACCENT_SWATCHES.map(({ color, label }) => (
+                <button
+                  key={color}
+                  className={`${styles.swatch} ${accentColor === color ? styles.swatchActive : ''}`}
+                  style={{ '--swatch-color': color }}
+                  onClick={() => setAccentColor(color)}
+                  aria-label={label}
+                  title={label}
+                />
               ))}
             </div>
           </div>

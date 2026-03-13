@@ -210,6 +210,34 @@
   color: var(--emergence-color-text-primary);
 }
 
+.swatches {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: var(--swatch-color);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    transform 150ms var(--emergence-ease-standard),
+    border-color 150ms var(--emergence-ease-standard);
+}
+
+.swatch:hover {
+  transform: scale(1.2);
+}
+
+.swatchActive {
+  border-color: var(--emergence-color-text-primary);
+  transform: scale(1.15);
+}
+
 @media (max-width: 880px) {
   .main {
     grid-template-columns: minmax(0, 1fr);
