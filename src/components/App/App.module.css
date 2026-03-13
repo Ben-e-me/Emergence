@@ -84,6 +84,37 @@
   background: rgba(10, 10, 18, 0.8);
 }
 
+.controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.controlBtn {
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--emergence-color-panel-border);
+  background: rgba(123, 97, 255, 0.12);
+  color: var(--emergence-color-text-primary);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    background 200ms var(--emergence-ease-standard),
+    border-color 200ms var(--emergence-ease-standard);
+}
+
+.controlBtn:hover:not(:disabled) {
+  background: rgba(123, 97, 255, 0.28);
+  border-color: rgba(123, 97, 255, 0.5);
+}
+
+.controlBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 @media (max-width: 880px) {
   .main {
     grid-template-columns: minmax(0, 1fr);

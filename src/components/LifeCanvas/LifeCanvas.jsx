@@ -3,25 +3,17 @@
  * @description Canvas-based visualization of the Game of Life universe sized to the viewport.
  * @architecture
  * - Uses a high-DPI canvas so each logical cell maps to at least one device pixel.
- * - Delegates simulation state to the useGameOfLife hook and focuses solely on rendering.
+ * - Receives simulation state as props; orchestration lives in App.
  */
 import React, { useEffect, useRef } from 'react';
-import { useGameOfLife } from '../../hooks/useGameOfLife.js';
-import { useViewportGrid } from '../../hooks/useViewportGrid.js';
 import styles from './LifeCanvas.module.css';
 
 /**
- * @returns {JSX.Element} Canvas element that fills its container and renders the current universe state.
+ * @param {{ grid: Uint8Array; ages: Uint16Array; width: number; height: number; cellSizeCss: number }} props
+ * @returns {JSX.Element}
  */
-export function LifeCanvas() {
-  const { width, height, cellSizeCss } = useViewportGrid();
+export function LifeCanvas({ grid, ages, width, height, cellSizeCss }) {
   const canvasRef = useRef(/** @type {HTMLCanvasElement | null} */ (null));
-
-  const { grid, ages } = useGameOfLife({
-    width,
-    height,
-    autoStart: true,
-  });
 
   useEffect(() => {
     const canvas = canvasRef.current;
