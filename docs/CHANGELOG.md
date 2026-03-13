@@ -13,6 +13,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-03-13
+
+### Added
+
+- `src/simulation/universe.js` — `stepUniverse` extracted from the hook into a pure, independently testable module.
+- `tests/simulation/universe.test.js` — 11 tests covering still lifes, oscillators, birth/death rules, boundary conditions, and HighLife.
+- `tests/simulation/seeds.test.js` — 7 tests covering density accuracy, edge cases (0%/100%), and type guarantees.
+- `src/hooks/useAccentColor.js` — localStorage-backed accent color hook; applies choice to `--emergence-color-accent` globally.
+- Color swatch picker in the hero panel (6 presets: Violet, Cyan, Coral, Gold, Sky, Pink); selection persists across sessions.
+
+### Changed
+
+- `useGameOfLife` now imports `stepUniverse` from `src/simulation/universe.js` instead of defining it internally.
+
 ## [0.2.0] - 2026-03-13
 
 ### Added
