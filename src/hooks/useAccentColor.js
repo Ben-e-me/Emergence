@@ -10,7 +10,7 @@
 import { useEffect, useState } from 'react';
 
 const STORAGE_KEY = 'emergence-accent-color';
-const DEFAULT_COLOR = '#7b61ff';
+const DEFAULT_COLOR = '#ffffff';
 
 /**
  * @returns {[string, (color: string) => void]} Tuple of [accentColor, setAccentColor].
