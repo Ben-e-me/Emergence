@@ -55,6 +55,28 @@ export function useGameOfLife(options = {}) {
   const lastStepTimeRef = useRef(0);
   const rafIdRef = useRef(/** @type {number | null} */ (null));
 
+  // Reallocate buffers when grid dimensions change (e.g. after viewport resize).
+  // Without this the typed arrays stay at the initial 72×72 size while the step
+  // function is called with the real viewport dimensions, producing out-of-bounds
+  // reads that leave the bottom ~25 % of every tile permanently dead.
+  const prevWidthRef = useRef(width);
+  const prevHeightRef = useRef(height);
+  useEffect(() => {
+    if (prevWidthRef.current === width && prevHeightRef.current === height) return;
+    prevWidthRef.current = width;
+    prevHeightRef.current = height;
+    frontUniverseRef.current = createUniverse(width, height);
+    backUniverseRef.current = createUniverse(width, height);
+    historyRef.current = [];
+    setHistoryLength(0);
+    const g = frontUniverseRef.current.grid;
+    for (let i = 0; i < g.length; i += 1) {
+      g[i] = Math.random() < 0.35 ? 1 : 0;
+    }
+    setGridView(frontUniverseRef.current.grid);
+    setAgesView(frontUniverseRef.current.ages);
+  }, [width, height]);
+
   // Internal: advance one generation without setState.
   const advance = useCallback(() => {
     const front = frontUniverseRef.current;

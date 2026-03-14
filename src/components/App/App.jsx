@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './App.module.css';
 import { LifeCanvas } from '../LifeCanvas/LifeCanvas.jsx';
 import { Sidebar } from '../Sidebar/Sidebar.jsx';
+import { IntroOverlay, hasSeenIntro, STORAGE_KEY } from '../IntroOverlay/IntroOverlay.jsx';
 import { useGameOfLife } from '../../hooks/useGameOfLife.js';
 import { useViewportGrid } from '../../hooks/useViewportGrid.js';
 import { useAccentColor } from '../../hooks/useAccentColor.js';
@@ -32,6 +33,7 @@ const RULE_MAP = {
 export function App() {
   const { width, height, cellSizeCss } = useViewportGrid();
   const [accentColor, setAccentColor] = useAccentColor();
+  const [showIntro, setShowIntro] = useState(() => !hasSeenIntro());
 
   const [speedIndex, setSpeedIndex] = useState(DEFAULT_SPEED_INDEX);
   const [zoomIndex, setZoomIndex] = useState(DEFAULT_ZOOM_INDEX);
@@ -63,8 +65,26 @@ export function App() {
     if (idx !== -1) setZoomIndex(idx);
   };
 
+  const handleReplayIntro = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    setShowIntro(true);
+  };
+
   return (
     <div className={styles.root}>
+      {showIntro && (
+        <IntroOverlay
+          onDone={() => {
+            reset(randomSeed());
+            setShowIntro(false);
+          }}
+        />
+      )}
+      {!showIntro && (
+        <button className={styles.replayButton} onClick={handleReplayIntro}>
+          Intro
+        </button>
+      )}
       <LifeCanvas
         grid={grid}
         ages={ages}

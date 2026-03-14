@@ -85,11 +85,10 @@ function getContrastColor(hex) {
   return 0.299 * r + 0.587 * g + 0.114 * b > 0.55 ? '#000000' : '#ffffff';
 }
 
-/** Formats a zoom factor as a label string (e.g. 0.25 → '1/4×', 4 → '4×'). */
+/** Formats a zoom factor as a label string (e.g. 0.25 → '0.25×', 4 → '4×'). */
 function formatZoomLabel(zoom) {
   if (zoom >= 1) return `${Math.round(zoom)}×`;
-  const denom = Math.round(1 / zoom);
-  return `1/${denom}×`;
+  return `${zoom}×`;
 }
 
 // ─── SVG Icons ────────────────────────────────────────────────────────────────

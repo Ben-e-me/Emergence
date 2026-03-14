@@ -113,6 +113,8 @@ export function LifeCanvas({ grid, ages, width, height, cellSizeCss, accentColor
       tileCtx.fillStyle = '#0a0a12';
       tileCtx.fillRect(0, 0, tileW, tileH);
       tileCtx.fillStyle = accentColor || '#ffffff';
+      tileCtx.shadowBlur = 4;
+      tileCtx.shadowColor = accentColor || '#ffffff';
       // Draw 3×3 copies of the simulation into the tile
       for (let gy = 0; gy < 3; gy += 1) {
         for (let gx = 0; gx < 3; gx += 1) {
@@ -120,7 +122,7 @@ export function LifeCanvas({ grid, ages, width, height, cellSizeCss, accentColor
             for (let x = 0; x < width; x += 1) {
               const index = y * width + x;
               if (grid[index] === 1) {
-                tileCtx.globalAlpha = Math.min(1, 0.3 + ages[index] * 0.02);
+                tileCtx.globalAlpha = Math.min(1, 0.75 + ages[index] * 0.015);
                 tileCtx.fillRect(
                   gx * baseW + x * cellSizeCss,
                   gy * baseH + y * cellSizeCss,
@@ -132,6 +134,7 @@ export function LifeCanvas({ grid, ages, width, height, cellSizeCss, accentColor
           }
         }
       }
+      tileCtx.shadowBlur = 0;
       tileCtx.globalAlpha = 1;
 
       // Compute which tiles are visible and draw only those
@@ -155,15 +158,18 @@ export function LifeCanvas({ grid, ages, width, height, cellSizeCss, accentColor
     } else {
       // ── Normal drawing with age-based alpha ──────────────────────────────────
       ctx.fillStyle = accentColor || '#ffffff';
+      ctx.shadowBlur = 4;
+      ctx.shadowColor = accentColor || '#ffffff';
       for (let y = 0; y < height; y += 1) {
         for (let x = 0; x < width; x += 1) {
           const index = y * width + x;
           if (grid[index] === 1) {
-            ctx.globalAlpha = Math.min(1, 0.3 + ages[index] * 0.02);
+            ctx.globalAlpha = Math.min(1, 0.75 + ages[index] * 0.015);
             ctx.fillRect(x * cellSizeCss, y * cellSizeCss, cellSizeCss, cellSizeCss);
           }
         }
       }
+      ctx.shadowBlur = 0;
     }
 
     ctx.restore();

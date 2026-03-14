@@ -1,0 +1,209 @@
+/*
+ * @file Visuals.module.css
+ * @description Shared styles for per-beat SVG illustrations in the IntroOverlay.
+ */
+
+.svg {
+  width: 160px;
+  height: 160px;
+  overflow: visible;
+}
+
+/* ── Beat 1: single dot ─────────────────────────────────────────────────── */
+
+.dotRing {
+  fill: none;
+  stroke: var(--emergence-color-accent, #7c3aed);
+  stroke-width: 1;
+  opacity: 0.18;
+  animation: dotPulse 2.4s ease-in-out infinite;
+}
+
+.dotMid {
+  fill: var(--emergence-color-accent, #7c3aed);
+  opacity: 0.12;
+  animation: dotPulse 2.4s ease-in-out infinite 0.2s;
+}
+
+.dotCore {
+  fill: var(--emergence-color-accent, #7c3aed);
+  opacity: 0.9;
+  animation: dotBreathe 2.4s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%,
+  100% {
+    opacity: 0.12;
+    transform: scale(1);
+    transform-origin: 100px 100px;
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.08);
+    transform-origin: 100px 100px;
+  }
+}
+
+@keyframes dotBreathe {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ── Beat 2: neuron firing ──────────────────────────────────────────────── */
+
+/* Axons: animated glow-pulse traveling from center outward */
+.axon {
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+  animation: axonFire 2.2s ease-in-out infinite;
+}
+
+@keyframes axonFire {
+  0%,
+  100% {
+    stroke: rgba(255, 255, 255, 0.06);
+    stroke-width: 1;
+  }
+  40% {
+    stroke: var(--emergence-color-accent, #7c3aed);
+    stroke-width: 1.5;
+    opacity: 0.55;
+  }
+  60% {
+    stroke: rgba(255, 255, 255, 0.12);
+  }
+}
+
+/* Outer node ring (pulse glow) */
+.neuronRing {
+  fill: none;
+  stroke: var(--emergence-color-accent, #7c3aed);
+  stroke-width: 1;
+  opacity: 0;
+  animation: neuronPulse 2.2s ease-out infinite;
+}
+
+@keyframes neuronPulse {
+  0% {
+    opacity: 0;
+    r: 8;
+  }
+  35% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.55;
+    r: 14;
+  }
+  80% {
+    opacity: 0;
+    r: 18;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Outer node cell */
+.neuronCell {
+  fill: rgba(255, 255, 255, 0.25);
+  animation: neuronCellFire 2.2s ease-out infinite;
+}
+
+@keyframes neuronCellFire {
+  0%,
+  100% {
+    fill: rgba(255, 255, 255, 0.2);
+    opacity: 0.6;
+  }
+  55% {
+    fill: var(--emergence-color-accent, #7c3aed);
+    opacity: 1;
+  }
+  75% {
+    opacity: 0.7;
+  }
+}
+
+/* Central core ring — always pulsing to show the initiating signal */
+.neuronCoreRing {
+  fill: var(--emergence-color-accent, #7c3aed);
+  opacity: 0.1;
+  animation: coreRingPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes coreRingPulse {
+  0%,
+  100% {
+    opacity: 0.08;
+    r: 18;
+  }
+  20% {
+    opacity: 0.25;
+    r: 24;
+  }
+  40% {
+    opacity: 0.08;
+  }
+}
+
+/* Central core cell */
+.neuronCore {
+  fill: var(--emergence-color-accent, #7c3aed);
+  opacity: 0.9;
+  animation: coreFire 2.2s ease-in-out infinite;
+}
+
+@keyframes coreFire {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  15% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0.75;
+  }
+}
+
+/* ── Beat 3: rule grid ──────────────────────────────────────────────────── */
+
+.gridCellDead {
+  fill: rgba(255, 255, 255, 0.05);
+  transition: fill 0.35s ease;
+}
+
+.gridCellNeighbor {
+  fill: rgba(255, 255, 255, 0.09);
+  transition: fill 0.35s ease;
+}
+
+.gridCellAlive {
+  fill: var(--emergence-color-accent, #7c3aed);
+  opacity: 0.88;
+  transition: fill 0.35s ease;
+  filter: drop-shadow(0 0 4px var(--emergence-color-accent, #7c3aed));
+}
+
+/* ── CTA: emergence grid ────────────────────────────────────────────────── */
+
+.emergenceDead {
+  fill: rgba(255, 255, 255, 0.04);
+  transition: fill 0.5s ease;
+}
+
+.emergenceAlive {
+  fill: var(--cell-color, var(--emergence-color-accent, #7c3aed));
+  opacity: 0.88;
+  transition:
+    fill 0.5s ease,
+    opacity 0.5s ease;
+  filter: drop-shadow(0 0 3px var(--cell-color, var(--emergence-color-accent, #7c3aed)));
+}

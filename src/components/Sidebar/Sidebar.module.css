@@ -275,13 +275,16 @@
 
 .tripleRow {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  /* Fixed 72px centre prevents the reset button from shifting +/- button widths */
+  grid-template-columns: 1fr 72px 1fr;
   align-items: center;
   gap: 8px;
 }
 
 .tripleRow .iconBtn {
   width: 100%;
+  max-width: 72px;
+  justify-self: center;
 }
 
 /* ── Time section ──────────────────────────────────────────────────────────── */

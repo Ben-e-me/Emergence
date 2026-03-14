@@ -4,6 +4,8 @@
  * @architecture
  * - Tests use canonical Game of Life patterns (still lifes, oscillators) whose outcomes are known.
  * - Each test allocates its own buffers and calls stepUniverse directly — no React, no timers.
+ * - The simulation uses toroidal (wrapping) boundary conditions; tests use grids large enough
+ *   that patterns don't interact with themselves through the wrap-around.
  */
 import { describe, expect, it } from 'vitest';
 import { stepUniverse } from '../../src/simulation/universe.js';
@@ -35,197 +37,190 @@ function step(grid, ages, width, height, rule = RULE_CONWAY_CLASSIC) {
 describe('stepUniverse', () => {
   describe('still lifes', () => {
     it('block (2x2) survives unchanged', () => {
-      // 4x4 grid, block at (1,1)–(2,2)
-      // . . . .
-      // . X X .
-      // . X X .
-      // . . . .
-      const { grid, ages } = makeBuffers(4, 4);
-      grid[1 * 4 + 1] = 1;
-      grid[1 * 4 + 2] = 1;
-      grid[2 * 4 + 1] = 1;
-      grid[2 * 4 + 2] = 1;
-      ages[1 * 4 + 1] = 3;
-      ages[1 * 4 + 2] = 3;
-      ages[2 * 4 + 1] = 3;
-      ages[2 * 4 + 2] = 3;
+      // 6x6 grid, block centered at (2,2)–(3,3)
+      const { grid, ages } = makeBuffers(6, 6);
+      grid[2 * 6 + 2] = 1;
+      grid[2 * 6 + 3] = 1;
+      grid[3 * 6 + 2] = 1;
+      grid[3 * 6 + 3] = 1;
+      ages[2 * 6 + 2] = 3;
+      ages[2 * 6 + 3] = 3;
+      ages[3 * 6 + 2] = 3;
+      ages[3 * 6 + 3] = 3;
 
-      const { grid: next, ages: nextAges } = step(grid, ages, 4, 4);
+      const { grid: next, ages: nextAges } = step(grid, ages, 6, 6);
 
-      expect(next[1 * 4 + 1]).toBe(1);
-      expect(next[1 * 4 + 2]).toBe(1);
-      expect(next[2 * 4 + 1]).toBe(1);
-      expect(next[2 * 4 + 2]).toBe(1);
-      // All other cells dead
+      expect(next[2 * 6 + 2]).toBe(1);
+      expect(next[2 * 6 + 3]).toBe(1);
+      expect(next[3 * 6 + 2]).toBe(1);
+      expect(next[3 * 6 + 3]).toBe(1);
       const aliveCount = Array.from(next).filter((v) => v === 1).length;
       expect(aliveCount).toBe(4);
     });
 
     it('block ages increment for surviving cells', () => {
-      const { grid, ages } = makeBuffers(4, 4);
-      grid[1 * 4 + 1] = 1;
-      grid[1 * 4 + 2] = 1;
-      grid[2 * 4 + 1] = 1;
-      grid[2 * 4 + 2] = 1;
-      ages[1 * 4 + 1] = 5;
-      ages[1 * 4 + 2] = 5;
-      ages[2 * 4 + 1] = 5;
-      ages[2 * 4 + 2] = 5;
+      const { grid, ages } = makeBuffers(6, 6);
+      grid[2 * 6 + 2] = 1;
+      grid[2 * 6 + 3] = 1;
+      grid[3 * 6 + 2] = 1;
+      grid[3 * 6 + 3] = 1;
+      ages[2 * 6 + 2] = 5;
+      ages[2 * 6 + 3] = 5;
+      ages[3 * 6 + 2] = 5;
+      ages[3 * 6 + 3] = 5;
 
-      const { ages: nextAges } = step(grid, ages, 4, 4);
+      const { ages: nextAges } = step(grid, ages, 6, 6);
 
-      expect(nextAges[1 * 4 + 1]).toBe(6);
-      expect(nextAges[1 * 4 + 2]).toBe(6);
-      expect(nextAges[2 * 4 + 1]).toBe(6);
-      expect(nextAges[2 * 4 + 2]).toBe(6);
+      expect(nextAges[2 * 6 + 2]).toBe(6);
+      expect(nextAges[2 * 6 + 3]).toBe(6);
+      expect(nextAges[3 * 6 + 2]).toBe(6);
+      expect(nextAges[3 * 6 + 3]).toBe(6);
     });
   });
 
   describe('oscillators', () => {
     it('blinker (horizontal) rotates to vertical after one step', () => {
-      // 3x3 grid
-      // . . .
-      // X X X  (row 1, cols 0-2)
-      // . . .
-      const { grid, ages } = makeBuffers(3, 3);
-      grid[1 * 3 + 0] = 1;
-      grid[1 * 3 + 1] = 1;
-      grid[1 * 3 + 2] = 1;
+      // 7x7 grid, horizontal blinker at row 3, cols 2-4 (centered, far from edges)
+      // This ensures toroidal wrap-around doesn't interact with the blinker.
+      const { grid, ages } = makeBuffers(7, 7);
+      grid[3 * 7 + 2] = 1;
+      grid[3 * 7 + 3] = 1;
+      grid[3 * 7 + 4] = 1;
 
-      const { grid: next } = step(grid, ages, 3, 3);
+      const { grid: next } = step(grid, ages, 7, 7);
 
-      // Vertical blinker: col 1, rows 0-2
-      expect(next[0 * 3 + 1]).toBe(1);
-      expect(next[1 * 3 + 1]).toBe(1);
-      expect(next[2 * 3 + 1]).toBe(1);
-      // Horizontal cells at ends die
-      expect(next[1 * 3 + 0]).toBe(0);
-      expect(next[1 * 3 + 2]).toBe(0);
+      // Vertical blinker: col 3, rows 2-4
+      expect(next[2 * 7 + 3]).toBe(1);
+      expect(next[3 * 7 + 3]).toBe(1);
+      expect(next[4 * 7 + 3]).toBe(1);
+      // Horizontal ends die
+      expect(next[3 * 7 + 2]).toBe(0);
+      expect(next[3 * 7 + 4]).toBe(0);
     });
 
     it('blinker returns to original orientation after two steps', () => {
-      const { grid, ages } = makeBuffers(3, 3);
-      grid[1 * 3 + 0] = 1;
-      grid[1 * 3 + 1] = 1;
-      grid[1 * 3 + 2] = 1;
+      const { grid, ages } = makeBuffers(7, 7);
+      grid[3 * 7 + 2] = 1;
+      grid[3 * 7 + 3] = 1;
+      grid[3 * 7 + 4] = 1;
 
-      const { grid: step1, ages: ages1 } = step(grid, ages, 3, 3);
-      const { grid: step2 } = step(step1, ages1, 3, 3);
+      const { grid: step1, ages: ages1 } = step(grid, ages, 7, 7);
+      const { grid: step2 } = step(step1, ages1, 7, 7);
 
-      expect(step2[1 * 3 + 0]).toBe(1);
-      expect(step2[1 * 3 + 1]).toBe(1);
-      expect(step2[1 * 3 + 2]).toBe(1);
-      expect(step2[0 * 3 + 1]).toBe(0);
-      expect(step2[2 * 3 + 1]).toBe(0);
+      expect(step2[3 * 7 + 2]).toBe(1);
+      expect(step2[3 * 7 + 3]).toBe(1);
+      expect(step2[3 * 7 + 4]).toBe(1);
+      expect(step2[2 * 7 + 3]).toBe(0);
+      expect(step2[4 * 7 + 3]).toBe(0);
     });
   });
 
   describe('birth and death rules', () => {
     it('dead cell with exactly 3 neighbors is born', () => {
-      // 3x3 grid: three live cells around centre of top row
-      // X X X
-      // . . .
-      // . . .
-      const { grid, ages } = makeBuffers(3, 3);
-      grid[0] = 1; // (0,0)
-      grid[1] = 1; // (0,1)
-      grid[2] = 1; // (0,2)
-
-      const { grid: next } = step(grid, ages, 3, 3);
-
-      // Centre cell (1,1) has 3 live neighbors → born
-      expect(next[1 * 3 + 1]).toBe(1);
-      // New age is 1
-    });
-
-    it('live cell with fewer than 2 neighbors dies (underpopulation)', () => {
-      // Single isolated cell
+      // 5x5 grid: three live cells along top of center row
       const { grid, ages } = makeBuffers(5, 5);
-      grid[2 * 5 + 2] = 1;
+      grid[2 * 5 + 1] = 1; // (row 2, col 1)
+      grid[2 * 5 + 2] = 1; // (row 2, col 2)
+      grid[2 * 5 + 3] = 1; // (row 2, col 3)
 
       const { grid: next } = step(grid, ages, 5, 5);
 
-      expect(next[2 * 5 + 2]).toBe(0);
+      // Centre cell above (1,2) has 3 live neighbors → born
+      expect(next[1 * 5 + 2]).toBe(1);
+      // Centre cell below (3,2) has 3 live neighbors → born
+      expect(next[3 * 5 + 2]).toBe(1);
+    });
+
+    it('live cell with fewer than 2 neighbors dies (underpopulation)', () => {
+      // Single isolated cell in center of 9x9 (far from any wrap-around neighbor)
+      const { grid, ages } = makeBuffers(9, 9);
+      grid[4 * 9 + 4] = 1;
+
+      const { grid: next } = step(grid, ages, 9, 9);
+
+      expect(next[4 * 9 + 4]).toBe(0);
     });
 
     it('live cell with more than 3 neighbors dies (overpopulation)', () => {
-      // Centre surrounded by 4 live cells in cardinal directions
-      // . X .
-      // X X X
-      // . X .
-      const { grid, ages } = makeBuffers(3, 3);
-      grid[0 * 3 + 1] = 1;
-      grid[1 * 3 + 0] = 1;
-      grid[1 * 3 + 1] = 1; // centre
-      grid[1 * 3 + 2] = 1;
-      grid[2 * 3 + 1] = 1;
+      // Centre surrounded by 4 live cells in a plus pattern (7x7 grid, centered)
+      const { grid, ages } = makeBuffers(7, 7);
+      grid[3 * 7 + 2] = 1; // left
+      grid[2 * 7 + 3] = 1; // top
+      grid[3 * 7 + 3] = 1; // centre
+      grid[3 * 7 + 4] = 1; // right
+      grid[4 * 7 + 3] = 1; // bottom
 
-      const { grid: next } = step(grid, ages, 3, 3);
+      const { grid: next } = step(grid, ages, 7, 7);
 
       // Centre has 4 neighbors → dies
-      expect(next[1 * 3 + 1]).toBe(0);
+      expect(next[3 * 7 + 3]).toBe(0);
     });
 
     it('newly born cell gets age 1', () => {
-      const { grid, ages } = makeBuffers(3, 3);
-      grid[0] = 1;
-      grid[1] = 1;
-      grid[2] = 1;
-
-      const { ages: nextAges } = step(grid, ages, 3, 3);
-
-      expect(nextAges[1 * 3 + 1]).toBe(1);
-    });
-
-    it('dead cells reset age to 0', () => {
       const { grid, ages } = makeBuffers(5, 5);
-      // Isolated cell will die
+      grid[2 * 5 + 1] = 1;
       grid[2 * 5 + 2] = 1;
-      ages[2 * 5 + 2] = 10;
+      grid[2 * 5 + 3] = 1;
 
       const { ages: nextAges } = step(grid, ages, 5, 5);
 
-      expect(nextAges[2 * 5 + 2]).toBe(0);
+      expect(nextAges[1 * 5 + 2]).toBe(1);
+    });
+
+    it('dead cells reset age to 0', () => {
+      const { grid, ages } = makeBuffers(9, 9);
+      // Isolated cell will die
+      grid[4 * 9 + 4] = 1;
+      ages[4 * 9 + 4] = 10;
+
+      const { ages: nextAges } = step(grid, ages, 9, 9);
+
+      expect(nextAges[4 * 9 + 4]).toBe(0);
     });
   });
 
   describe('boundary conditions', () => {
-    it('cells at grid edges do not wrap and count only in-bounds neighbors', () => {
-      // Corner cell at (0,0) with one neighbor at (0,1) — should die (1 neighbor < 2)
-      const { grid, ages } = makeBuffers(3, 3);
-      grid[0] = 1;
-      grid[1] = 1;
+    it('cells at grid edges wrap to the opposite side (toroidal)', () => {
+      // On a 5x5 toroidal grid, a cell at col 0 sees col 4 as its left neighbor.
+      // Place 3 cells in a horizontal blinker at row 2, cols 3-0-1 (wrapping across col boundary).
+      // col 3, col 4, col 0 — horizontal across the wrap.
+      const { grid, ages } = makeBuffers(5, 5);
+      grid[2 * 5 + 3] = 1; // (row 2, col 3)
+      grid[2 * 5 + 4] = 1; // (row 2, col 4)
+      grid[2 * 5 + 0] = 1; // (row 2, col 0)
 
-      const { grid: next } = step(grid, ages, 3, 3);
+      const { grid: next } = step(grid, ages, 5, 5);
 
-      expect(next[0]).toBe(0);
+      // col 4 neighbors: col 3 (alive) + col 0 (alive via wrap) → 2 neighbors → survives.
+      // col 0 neighbors: only col 4 (alive via wrap) → 1 neighbor → dies.
+      // Cells above/below col 4 (rows 1 and 3) see all 3 blinker cells as neighbors → born.
+      expect(next[2 * 5 + 4]).toBe(1); // survives (2 neighbors)
+      expect(next[2 * 5 + 0]).toBe(0); // dies (1 neighbor)
+      expect(next[1 * 5 + 4]).toBe(1); // born (3 neighbors via wrap)
+      expect(next[3 * 5 + 4]).toBe(1); // born (3 neighbors via wrap)
     });
   });
 
   describe('HighLife rule', () => {
     it('dead cell with 6 neighbors is born under HighLife (not Classic)', () => {
-      // 5x5 grid: 6 live cells surrounding centre
-      // . X X .  .
-      // X . X .  .  (centre at (2,2))
-      // . X X .  .
-      // We'll construct a pattern where (2,2) has exactly 6 live neighbors
-      const { grid, ages } = makeBuffers(5, 5);
-      // Neighbours of (2,2): (1,1),(1,2),(1,3),(2,1),(2,3),(3,1),(3,2),(3,3)
+      // 7x7 grid: 6 live cells surrounding centre at (3,3)
+      const { grid, ages } = makeBuffers(7, 7);
+      // Neighbours of (3,3): (2,2),(2,3),(2,4),(3,2),(3,4),(4,2),(4,3),(4,4)
       // Set 6 of them alive
-      grid[1 * 5 + 1] = 1;
-      grid[1 * 5 + 2] = 1;
-      grid[1 * 5 + 3] = 1;
-      grid[2 * 5 + 1] = 1;
-      grid[2 * 5 + 3] = 1;
-      grid[3 * 5 + 1] = 1;
+      grid[2 * 7 + 2] = 1;
+      grid[2 * 7 + 3] = 1;
+      grid[2 * 7 + 4] = 1;
+      grid[3 * 7 + 2] = 1;
+      grid[3 * 7 + 4] = 1;
+      grid[4 * 7 + 2] = 1;
 
-      const { grid: nextClassic } = step(grid, ages, 5, 5, RULE_CONWAY_CLASSIC);
-      const { grid: nextHighLife } = step(grid, ages, 5, 5, RULE_HIGH_LIFE);
+      const { grid: nextClassic } = step(grid, ages, 7, 7, RULE_CONWAY_CLASSIC);
+      const { grid: nextHighLife } = step(grid, ages, 7, 7, RULE_HIGH_LIFE);
 
-      // Classic: 6 neighbors → not born (born only at 3)
-      expect(nextClassic[2 * 5 + 2]).toBe(0);
+      // Classic: 6 neighbors → not born
+      expect(nextClassic[3 * 7 + 3]).toBe(0);
       // HighLife: born at 3 or 6 → born
-      expect(nextHighLife[2 * 5 + 2]).toBe(1);
+      expect(nextHighLife[3 * 7 + 3]).toBe(1);
     });
   });
 });

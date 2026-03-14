@@ -38,9 +38,8 @@ export function stepUniverse(currentGrid, currentAges, nextGrid, nextAges, width
       for (let dy = -1; dy <= 1; dy += 1) {
         for (let dx = -1; dx <= 1; dx += 1) {
           if (dx === 0 && dy === 0) continue;
-          const nx = x + dx;
-          const ny = y + dy;
-          if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue;
+          const nx = ((x + dx) % width + width) % width;
+          const ny = ((y + dy) % height + height) % height;
           const nIndex = ny * width + nx;
           if (currentGrid[nIndex] === 1) {
             neighbors += 1;

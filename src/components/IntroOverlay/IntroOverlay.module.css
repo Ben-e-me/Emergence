@@ -1,0 +1,308 @@
+/*
+ * @file IntroOverlay.module.css
+ * @description Styles for the narrative intro overlay.
+ * @architecture
+ * - z-index 300 sits above the sidebar (100) and color-picker overlay (200).
+ * - Solid dark overlay, no simulation bleed-through.
+ * - Content is pushed to optical center via padding-bottom (15% extra space below).
+ * - Progress dots on bottom; hint positioned above them; skip at bottom-right.
+ */
+
+/* ── Shell ───────────────────────────────────────────────────────────────── */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Optical center: pad bottom so flex-center sits ~42% from top */
+  justify-content: center;
+  padding-bottom: 15%;
+
+  background: #0a0a12;
+
+  cursor: pointer;
+  user-select: none;
+
+  transition: opacity 0.8s ease;
+}
+
+.exit {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Beat content ────────────────────────────────────────────────────────── */
+
+.beatContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  max-width: 620px;
+  padding: 0 2rem;
+  text-align: center;
+
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+.beatVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Rules beat needs wider columns (~50% more than standard 620px) */
+.beatContentWide {
+  max-width: 780px;
+}
+
+.visualArea {
+  flex-shrink: 0;
+}
+
+.textArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.heading {
+  margin: 0 0 32px;
+  font-family: var(--emergence-font-display, 'Inter', sans-serif);
+  font-size: clamp(1.4rem, 4vw, 2.25rem);
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.body {
+  margin: 0;
+  font-family: var(--emergence-font-display, 'Inter', sans-serif);
+  font-size: clamp(0.99rem, 2.2vw, 1.155rem);
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Rules inline 3-column grid ──────────────────────────────────────────── */
+
+.rulesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.rulesCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+
+  opacity: 0;
+  /* both fill-mode keeps column invisible during its delay */
+  animation: colReveal 0.7s ease both;
+}
+
+@keyframes colReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rulesColIcon {
+  width: 28px;
+  height: 28px;
+  color: var(--emergence-color-accent, #7c3aed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rulesColIcon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.rulesColTitle {
+  font-family: var(--emergence-font-display, 'Inter', sans-serif);
+  font-size: clamp(0.99rem, 2.2vw, 1.155rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--emergence-color-accent, #7c3aed);
+}
+
+.rulesColDesc {
+  margin: 0;
+  font-family: var(--emergence-font-display, 'Inter', sans-serif);
+  font-size: clamp(0.99rem, 2.2vw, 1.155rem);
+  font-weight: 300;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── CTA phase ───────────────────────────────────────────────────────────── */
+
+.ctaContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+  padding: 0 2rem;
+
+  /* Driven by .beatVisible like other beats */
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+/* Combined selector needed: .ctaContent comes after .beatVisible in the sheet
+   so equal-specificity .beatVisible alone would lose to .ctaContent {opacity:0} */
+.ctaContent.beatVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ctaVisual {
+  margin-bottom: 0.5rem;
+}
+
+.ctaEyebrow {
+  margin: 0;
+  font-family: var(--emergence-font-display, 'Inter', sans-serif);
+  font-size: 0.85rem;
+  font-weight: 300;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* Sidebar mono font for "Emergence" title — matches the product logo; 20% smaller */
+.ctaTitle {
+  margin: 0;
+  font-family: var(--emergence-font-family-mono, 'SF Mono', monospace);
+  font-size: clamp(2rem, 7.2vw, 4rem);
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* ── Hint ────────────────────────────────────────────────────────────────── */
+
+.hint {
+  position: absolute;
+  /* Anchored above pagination: dots are at 2.5rem, height 16px, add 1.5rem gap */
+  bottom: calc(2.5rem + 16px + 1.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+
+  margin: 0;
+  font-family: var(--emergence-font-display, 'Inter', sans-serif);
+  font-size: 0.84rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.25);
+  white-space: nowrap;
+
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.hintVisible {
+  opacity: 1;
+}
+
+/* ── Progress dots ───────────────────────────────────────────────────────── */
+
+.progress {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.progressDot {
+  /* Default: circular 16×16 */
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0;
+  cursor: default;
+  transition:
+    width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.3s ease,
+    transform 0.2s ease;
+}
+
+/* Active: pill 48×16 */
+.progressDotActive {
+  width: 48px;
+  background: var(--emergence-color-accent, #7c3aed);
+}
+
+/* Done: lighter circle, clickable back */
+.progressDotDone {
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+}
+
+.progressDotDone:hover {
+  background: rgba(255, 255, 255, 0.7);
+  transform: scale(1.15);
+}
+
+/* ── Skip button ─────────────────────────────────────────────────────────── */
+
+.skipButton {
+  position: absolute;
+  bottom: 1.75rem;
+  right: 1.75rem;
+
+  padding: 0.45rem 1.1rem;
+
+  background: transparent;
+  border: none;
+
+  font-family: var(--emergence-font-display, 'Inter', sans-serif);
+  font-size: 0.84rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.2);
+
+  cursor: pointer;
+
+  transition: color 0.2s ease;
+}
+
+.skipButton:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
