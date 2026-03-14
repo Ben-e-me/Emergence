@@ -536,13 +536,13 @@
   align-items: center;
 }
 
-/* Track: gradient bg, 16px tall, sits centered in the wrapper */
+/* Track: gradient bg, 8px tall, sits centered in the wrapper */
 .sliderTrack {
   position: absolute;
   left: 0;
   right: 0;
-  height: 16px;
-  border-radius: 6px;
+  height: 8px;
+  border-radius: 4px;
   background: var(--track-bg);
   pointer-events: none;
 }
@@ -560,14 +560,25 @@
   padding: 0;
 }
 
-/* Tall rectangular thumb — 14px wide, 48px tall, extends above/below track */
+/* Wide rectangular thumb — 28px wide, 40px tall; two grip lines for tactility */
 .hsbSlider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 14px;
-  height: 48px;
+  width: 28px;
+  height: 40px;
   border-radius: 4px;
   background: #fff;
+  background-image: linear-gradient(
+    to right,
+    transparent 31%,
+    rgba(0, 0, 0, 0.18) 31%,
+    rgba(0, 0, 0, 0.18) 38%,
+    transparent 38%,
+    transparent 62%,
+    rgba(0, 0, 0, 0.18) 62%,
+    rgba(0, 0, 0, 0.18) 69%,
+    transparent 69%
+  );
   border: none;
   box-shadow:
     0 2px 6px rgba(0, 0, 0, 0.5),
@@ -577,12 +588,12 @@
 }
 
 .hsbSlider::-webkit-slider-thumb:hover {
-  transform: scaleX(1.15);
+  transform: scaleX(1.08);
 }
 
 .hsbSlider::-moz-range-thumb {
-  width: 14px;
-  height: 48px;
+  width: 28px;
+  height: 40px;
   border-radius: 4px;
   background: #fff;
   border: none;
@@ -609,6 +620,7 @@
   border-radius: 10px;
   height: 44px;
   overflow: hidden;
+  margin-top: 14px;
 }
 
 .hexHash {
@@ -623,7 +635,7 @@
   height: 100%;
   border: none;
   background: transparent;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.9);
   font-family: var(--emergence-font-family-mono);
   font-size: 0.88rem;
   letter-spacing: 0.1em;
@@ -633,12 +645,13 @@
   caret-color: #ffffff;
 }
 
-.hexInput:focus {
-  color: rgba(255, 255, 255, 0.9);
-}
-
 .hexInput::placeholder {
   color: rgba(255, 255, 255, 0.15);
+}
+
+/* Hide placeholder when focused — cursor only, no background text */
+.hexInput:focus::placeholder {
+  color: transparent;
 }
 
 /* Error color only shown when not focused (to avoid looking like a live error while typing) */
@@ -651,6 +664,7 @@
 .applyBtn {
   height: 44px;
   border-radius: 10px;
+  margin-top: 14px;
   border: none;
   background: rgba(255, 255, 255, 0.1);
   color: var(--emergence-color-text-primary);

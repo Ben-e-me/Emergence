@@ -78,12 +78,7 @@ const FRAME_D = [
 const FRAMES = [FRAME_A, FRAME_B, FRAME_C, FRAME_D];
 
 // Four accent colors cycling through cells
-const COLORS = [
-  'var(--emergence-color-accent, #7c3aed)',
-  '#06b6d4',
-  '#f59e0b',
-  '#ec4899',
-];
+const COLORS = ['var(--emergence-color-accent, #7c3aed)', '#06b6d4', '#f59e0b', '#ec4899'];
 
 function getColor(c, r, frameIdx) {
   const dist = Math.round(Math.sqrt((c - 5) ** 2 + (r - 5) ** 2));
@@ -98,7 +93,7 @@ export function VisualEmergence() {
   const [frame, setFrame] = useState(0);
 
   useEffect(() => {
-    const id = setInterval(() => setFrame((f) => (f + 1) % FRAMES.length), 600);
+    const id = setInterval(() => setFrame((f) => (f + 1) % FRAMES.length), 300);
     return () => clearInterval(id);
   }, []);
 

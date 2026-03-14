@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './App.module.css';
 import { LifeCanvas } from '../LifeCanvas/LifeCanvas.jsx';
 import { Sidebar } from '../Sidebar/Sidebar.jsx';
-import { IntroOverlay, hasSeenIntro, STORAGE_KEY } from '../IntroOverlay/IntroOverlay.jsx';
+import { IntroOverlay } from '../IntroOverlay/IntroOverlay.jsx';
 import { useGameOfLife } from '../../hooks/useGameOfLife.js';
 import { useViewportGrid } from '../../hooks/useViewportGrid.js';
 import { useAccentColor } from '../../hooks/useAccentColor.js';
@@ -33,7 +33,8 @@ const RULE_MAP = {
 export function App() {
   const { width, height, cellSizeCss } = useViewportGrid();
   const [accentColor, setAccentColor] = useAccentColor();
-  const [showIntro, setShowIntro] = useState(() => !hasSeenIntro());
+  const [showIntro, setShowIntro] = useState(true);
+  const [showMaskIntro, setShowMaskIntro] = useState(false);
 
   const [speedIndex, setSpeedIndex] = useState(DEFAULT_SPEED_INDEX);
   const [zoomIndex, setZoomIndex] = useState(DEFAULT_ZOOM_INDEX);
@@ -66,7 +67,6 @@ export function App() {
   };
 
   const handleReplayIntro = () => {
-    localStorage.removeItem(STORAGE_KEY);
     setShowIntro(true);
   };
 
@@ -80,10 +80,24 @@ export function App() {
           }}
         />
       )}
-      {!showIntro && (
-        <button className={styles.replayButton} onClick={handleReplayIntro}>
-          Intro
-        </button>
+      {showMaskIntro && (
+        <IntroOverlay
+          variant="mask"
+          onDone={() => {
+            reset(randomSeed());
+            setShowMaskIntro(false);
+          }}
+        />
+      )}
+      {!showIntro && !showMaskIntro && (
+        <div className={styles.overlayButtons}>
+          <button className={styles.replayButton} onClick={handleReplayIntro}>
+            Intro
+          </button>
+          <button className={styles.replayButton} onClick={() => setShowMaskIntro(true)}>
+            Emerge
+          </button>
+        </div>
       )}
       <LifeCanvas
         grid={grid}

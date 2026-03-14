@@ -14,6 +14,7 @@ import { VisualDot } from './visuals/VisualDot.jsx';
 import { VisualNeurons } from './visuals/VisualNeurons.jsx';
 import { VisualRules } from './visuals/VisualRules.jsx';
 import { VisualEmergence } from './visuals/VisualEmergence.jsx';
+import { VisualEmergenceMask } from './visuals/VisualEmergenceMask.jsx';
 
 export const STORAGE_KEY = 'emergence-intro-seen';
 
@@ -50,8 +51,26 @@ function DeathIcon() {
       {/* Fading cell */}
       <rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" opacity="0.28" />
       {/* X mark */}
-      <line x1="7" y1="7" x2="17" y2="17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
-      <line x1="17" y1="7" x2="7" y2="17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
+      <line
+        x1="7"
+        y1="7"
+        x2="17"
+        y2="17"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        opacity="0.7"
+      />
+      <line
+        x1="17"
+        y1="7"
+        x2="7"
+        y2="17"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        opacity="0.7"
+      />
     </svg>
   );
 }
@@ -109,8 +128,8 @@ const VISUALS = {
 
 /* ── Component ──────────────────────────────────────────────────────────── */
 
-/** @param {{ onDone: () => void }} props */
-export function IntroOverlay({ onDone }) {
+/** @param {{ onDone: () => void, variant?: 'standard' | 'mask' }} props */
+export function IntroOverlay({ onDone, variant = 'standard' }) {
   const [beatIndex, setBeatIndex] = useState(0);
   const [visible, setVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
@@ -205,18 +224,28 @@ export function IntroOverlay({ onDone }) {
 
       {/* ── CTA beat ──────────────────────────────────────────────────── */}
       {!isExiting && beat?.type === 'cta' && (
-        <div className={`${styles.ctaContent} ${visible ? styles.beatVisible : ''}`}>
+        <div
+          className={[
+            styles.ctaContent,
+            variant === 'mask' ? styles.ctaContentMask : '',
+            visible ? styles.beatVisible : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+        >
           <div className={styles.ctaVisual}>
-            <Visual />
+            {variant === 'mask' ? <VisualEmergenceMask /> : <Visual />}
           </div>
           <p className={styles.ctaEyebrow}>This is</p>
-          <h1 className={styles.ctaTitle}>Emergence</h1>
+          {variant !== 'mask' && <h1 className={styles.ctaTitle}>Emergence</h1>}
         </div>
       )}
 
       {/* ── Rules beat ────────────────────────────────────────────────── */}
       {!isExiting && beat?.type === 'rules' && (
-        <div className={`${styles.beatContent} ${styles.beatContentWide} ${visible ? styles.beatVisible : ''}`}>
+        <div
+          className={`${styles.beatContent} ${styles.beatContentWide} ${visible ? styles.beatVisible : ''}`}
+        >
           <div className={styles.visualArea}>
             <Visual />
           </div>

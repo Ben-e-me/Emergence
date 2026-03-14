@@ -61,14 +61,7 @@ export function VisualNeurons() {
 
       {/* Central firing cell */}
       <circle cx={CX} cy={CY} r={22} className={styles.neuronCoreRing} />
-      <rect
-        x={CX - 10}
-        y={CY - 10}
-        width={20}
-        height={20}
-        rx="3"
-        className={styles.neuronCore}
-      />
+      <rect x={CX - 10} y={CY - 10} width={20} height={20} rx="3" className={styles.neuronCore} />
     </svg>
   );
 }

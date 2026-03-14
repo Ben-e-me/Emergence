@@ -43,8 +43,8 @@ function stepGrid(g) {
       for (let dy = -1; dy <= 1; dy += 1) {
         for (let dx = -1; dx <= 1; dx += 1) {
           if (dx === 0 && dy === 0) continue;
-          const nx = ((x + dx) % SIZE + SIZE) % SIZE;
-          const ny = ((y + dy) % SIZE + SIZE) % SIZE;
+          const nx = (((x + dx) % SIZE) + SIZE) % SIZE;
+          const ny = (((y + dy) % SIZE) + SIZE) % SIZE;
           if (g[ny * SIZE + nx]) n += 1;
         }
       }

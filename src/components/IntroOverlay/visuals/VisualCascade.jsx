@@ -42,12 +42,7 @@ const RINGS = [
 ];
 
 // Color per ring (accent palette)
-const RING_COLORS = [
-  'var(--emergence-color-accent, #7c3aed)',
-  '#06b6d4',
-  '#f59e0b',
-  '#ec4899',
-];
+const RING_COLORS = ['var(--emergence-color-accent, #7c3aed)', '#06b6d4', '#f59e0b', '#ec4899'];
 
 export function VisualCascade() {
   return (

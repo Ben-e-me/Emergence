@@ -42,7 +42,7 @@
   flex-direction: column;
   align-items: center;
   gap: 2rem;
-  max-width: 620px;
+  max-width: 720px;
   padding: 0 2rem;
   text-align: center;
 
@@ -60,7 +60,7 @@
 
 /* Rules beat needs wider columns (~50% more than standard 620px) */
 .beatContentWide {
-  max-width: 780px;
+  max-width: 900px;
 }
 
 .visualArea {
@@ -107,7 +107,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: calc(0.5rem + 32px);
   text-align: center;
 
   opacity: 0;
@@ -145,16 +145,17 @@
   font-family: var(--emergence-font-display, 'Inter', sans-serif);
   font-size: clamp(0.99rem, 2.2vw, 1.155rem);
   font-weight: 500;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--emergence-color-accent, #7c3aed);
 }
 
 .rulesColDesc {
-  margin: 0;
+  margin: 16px 0 0;
   font-family: var(--emergence-font-display, 'Inter', sans-serif);
   font-size: clamp(0.99rem, 2.2vw, 1.155rem);
   font-weight: 300;
-  line-height: 1.5;
+  line-height: 1.28;
   color: rgba(255, 255, 255, 0.45);
 }
 
@@ -174,6 +175,11 @@
   transition:
     opacity 0.5s ease,
     transform 0.5s ease;
+}
+
+/* Mask variant: widen container to accommodate the text-mask SVG */
+.ctaContentMask {
+  max-width: 480px;
 }
 
 /* Combined selector needed: .ctaContent comes after .beatVisible in the sheet
