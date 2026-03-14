@@ -50,11 +50,7 @@ export const DEFAULT_SPEED_INDEX = 2;
  * Discrete zoom steps. Each step doubles the previous.
  * Fractional values zoom out; 1× fills the viewport normally; higher values magnify.
  */
-export const ZOOM_STEPS = [
-  1 / 64, 1 / 32, 1 / 16, 1 / 8, 1 / 4, 1 / 2,
-  1,
-  2, 4, 8, 16, 32, 64,
-];
+export const ZOOM_STEPS = [1 / 64, 1 / 32, 1 / 16, 1 / 8, 1 / 4, 1 / 2, 1, 2, 4, 8, 16, 32, 64];
 
 /** Default zoom step index (0.5× = initial view shows cells at half size). */
 export const DEFAULT_ZOOM_INDEX = 5;

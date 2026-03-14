@@ -47,14 +47,32 @@ function hsbToHex(h, s, b) {
   const c = bv * sv;
   const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
   const m = bv - c;
-  let r = 0, g = 0, bl = 0;
-  if (h < 60) { r = c; g = x; }
-  else if (h < 120) { r = x; g = c; }
-  else if (h < 180) { g = c; bl = x; }
-  else if (h < 240) { g = x; bl = c; }
-  else if (h < 300) { r = x; bl = c; }
-  else { r = c; bl = x; }
-  const toHex = (n) => Math.round((n + m) * 255).toString(16).padStart(2, '0');
+  let r = 0,
+    g = 0,
+    bl = 0;
+  if (h < 60) {
+    r = c;
+    g = x;
+  } else if (h < 120) {
+    r = x;
+    g = c;
+  } else if (h < 180) {
+    g = c;
+    bl = x;
+  } else if (h < 240) {
+    g = x;
+    bl = c;
+  } else if (h < 300) {
+    r = x;
+    bl = c;
+  } else {
+    r = c;
+    bl = x;
+  }
+  const toHex = (n) =>
+    Math.round((n + m) * 255)
+      .toString(16)
+      .padStart(2, '0');
   return `#${toHex(r)}${toHex(g)}${toHex(bl)}`;
 }
 
@@ -88,7 +106,14 @@ function IconMenu() {
 
 function IconClose() {
   return (
-    <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      fill="none"
+      aria-hidden="true"
+    >
       <line x1="5" y1="5" x2="19" y2="19" />
       <line x1="19" y1="5" x2="5" y2="19" />
     </svg>
@@ -209,9 +234,27 @@ function IconRuleDead() {
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const RULE_PRESETS = [
-  { key: 'classic', label: 'Classic', rule: RULE_CONWAY_CLASSIC, description: 'The original. Simple rules, infinite complexity.', Icon: IconRuleClassic },
-  { key: 'highlife', label: 'HighLife', rule: RULE_HIGH_LIFE, description: 'Birth at 6 neighbors. Replicators emerge.', Icon: IconRuleHighLife },
-  { key: 'dead', label: 'Dead', rule: RULE_DEAD_UNIVERSE, description: 'Nothing survives. Watch it collapse.', Icon: IconRuleDead },
+  {
+    key: 'classic',
+    label: 'Classic',
+    rule: RULE_CONWAY_CLASSIC,
+    description: 'The original. Simple rules, infinite complexity.',
+    Icon: IconRuleClassic,
+  },
+  {
+    key: 'highlife',
+    label: 'HighLife',
+    rule: RULE_HIGH_LIFE,
+    description: 'Birth at 6 neighbors. Replicators emerge.',
+    Icon: IconRuleHighLife,
+  },
+  {
+    key: 'dead',
+    label: 'Dead',
+    rule: RULE_DEAD_UNIVERSE,
+    description: 'Nothing survives. Watch it collapse.',
+    Icon: IconRuleDead,
+  },
 ];
 
 const ACCENT_SWATCHES = [
@@ -224,7 +267,9 @@ const ACCENT_SWATCHES = [
 // ─── HSB Color Picker Overlay ─────────────────────────────────────────────────
 
 function HsbColorPicker({ currentColor, onApply, onClose }) {
-  const initial = hexToHsb(currentColor.startsWith('#') && currentColor.length === 7 ? currentColor : '#7b61ff');
+  const initial = hexToHsb(
+    currentColor.startsWith('#') && currentColor.length === 7 ? currentColor : '#7b61ff',
+  );
   const [h, setH] = useState(initial.h);
   const [s, setS] = useState(initial.s);
   const [bv, setBv] = useState(initial.b);
@@ -239,9 +284,21 @@ function HsbColorPicker({ currentColor, onApply, onClose }) {
     setHexError(false);
   };
 
-  const handleHChange = (v) => { const n = Number(v); setH(n); syncFromHsb(n, s, bv); };
-  const handleSChange = (v) => { const n = Number(v); setS(n); syncFromHsb(h, n, bv); };
-  const handleBChange = (v) => { const n = Number(v); setBv(n); syncFromHsb(h, s, n); };
+  const handleHChange = (v) => {
+    const n = Number(v);
+    setH(n);
+    syncFromHsb(n, s, bv);
+  };
+  const handleSChange = (v) => {
+    const n = Number(v);
+    setS(n);
+    syncFromHsb(h, n, bv);
+  };
+  const handleBChange = (v) => {
+    const n = Number(v);
+    setBv(n);
+    syncFromHsb(h, s, n);
+  };
 
   const handleHexChange = (val) => {
     const full = val.startsWith('#') ? val : `#${val}`;
@@ -257,7 +314,8 @@ function HsbColorPicker({ currentColor, onApply, onClose }) {
     }
   };
 
-  const hueGradient = 'linear-gradient(to right, hsl(0,100%,50%), hsl(60,100%,50%), hsl(120,100%,50%), hsl(180,100%,50%), hsl(240,100%,50%), hsl(300,100%,50%), hsl(360,100%,50%))';
+  const hueGradient =
+    'linear-gradient(to right, hsl(0,100%,50%), hsl(60,100%,50%), hsl(120,100%,50%), hsl(180,100%,50%), hsl(240,100%,50%), hsl(300,100%,50%), hsl(360,100%,50%))';
   const satGradient = `linear-gradient(to right, ${hsbToHex(h, 0, bv)}, ${hsbToHex(h, 100, bv)})`;
   const briGradient = `linear-gradient(to right, #000000, ${hsbToHex(h, s, 100)})`;
 
@@ -269,7 +327,9 @@ function HsbColorPicker({ currentColor, onApply, onClose }) {
       <div className={styles.overlayPanel} onClick={(e) => e.stopPropagation()}>
         <div className={styles.overlayHeader}>
           <span className={styles.overlayTitle}>Custom color</span>
-          <button className={styles.iconBtnSm} onClick={onClose} aria-label="Close"><IconClose /></button>
+          <button className={styles.iconBtnSm} onClick={onClose} aria-label="Close">
+            <IconClose />
+          </button>
         </div>
 
         <div className={styles.colorPreview} style={{ background: previewColor }} />
@@ -278,7 +338,14 @@ function HsbColorPicker({ currentColor, onApply, onClose }) {
           <span className={styles.sliderLabel}>Hue</span>
           <div className={styles.sliderWrapper}>
             <div className={styles.sliderTrack} style={{ '--track-bg': hueGradient }} />
-            <input className={styles.hsbSlider} type="range" min={0} max={360} value={h} onChange={(e) => handleHChange(e.target.value)} />
+            <input
+              className={styles.hsbSlider}
+              type="range"
+              min={0}
+              max={360}
+              value={h}
+              onChange={(e) => handleHChange(e.target.value)}
+            />
           </div>
         </div>
 
@@ -286,7 +353,14 @@ function HsbColorPicker({ currentColor, onApply, onClose }) {
           <span className={styles.sliderLabel}>Saturation</span>
           <div className={styles.sliderWrapper}>
             <div className={styles.sliderTrack} style={{ '--track-bg': satGradient }} />
-            <input className={styles.hsbSlider} type="range" min={0} max={100} value={s} onChange={(e) => handleSChange(e.target.value)} />
+            <input
+              className={styles.hsbSlider}
+              type="range"
+              min={0}
+              max={100}
+              value={s}
+              onChange={(e) => handleSChange(e.target.value)}
+            />
           </div>
         </div>
 
@@ -294,7 +368,14 @@ function HsbColorPicker({ currentColor, onApply, onClose }) {
           <span className={styles.sliderLabel}>Brightness</span>
           <div className={styles.sliderWrapper}>
             <div className={styles.sliderTrack} style={{ '--track-bg': briGradient }} />
-            <input className={styles.hsbSlider} type="range" min={0} max={100} value={bv} onChange={(e) => handleBChange(e.target.value)} />
+            <input
+              className={styles.hsbSlider}
+              type="range"
+              min={0}
+              max={100}
+              value={bv}
+              onChange={(e) => handleBChange(e.target.value)}
+            />
           </div>
         </div>
 
@@ -307,8 +388,14 @@ function HsbColorPicker({ currentColor, onApply, onClose }) {
             maxLength={6}
             placeholder="7b61ff"
             onChange={(e) => handleHexChange(e.target.value)}
-            onFocus={(e) => { setHexInput(''); setHexError(false); e.target.value = ''; }}
-            onBlur={() => { if (!hexInput || hexInput === '#') setHexInput(previewColor); }}
+            onFocus={(e) => {
+              setHexInput('');
+              setHexError(false);
+              e.target.value = '';
+            }}
+            onBlur={() => {
+              if (!hexInput || hexInput === '#') setHexInput(previewColor);
+            }}
             spellCheck={false}
           />
         </div>
@@ -316,7 +403,10 @@ function HsbColorPicker({ currentColor, onApply, onClose }) {
         <button
           className={styles.applyBtn}
           style={{ '--apply-hover-bg': applyHoverBg, '--apply-hover-text': applyHoverText }}
-          onClick={() => { onApply(previewColor); onClose(); }}
+          onClick={() => {
+            onApply(previewColor);
+            onClose();
+          }}
         >
           Apply
         </button>
@@ -367,7 +457,9 @@ function ResetLabel({ value, defaultValue, onReset }) {
       onMouseLeave={() => setHovered(false)}
     >
       {hovered && !isDefault ? (
-        <button className={styles.resetBtn} onClick={onReset}>reset</button>
+        <button className={styles.resetBtn} onClick={onReset}>
+          reset
+        </button>
       ) : (
         value
       )}
@@ -378,11 +470,19 @@ function ResetLabel({ value, defaultValue, onReset }) {
 // ─── Sidebar ──────────────────────────────────────────────────────────────────
 
 export function Sidebar({
-  isRunning, onToggleRunning, onStep, onStepBack, canStepBack,
-  generationsPerSecond, onSpeedChange,
-  zoom, onZoomChange,
-  activeRuleKey, onRuleChange,
-  accentColor, onColorChange,
+  isRunning,
+  onToggleRunning,
+  onStep,
+  onStepBack,
+  canStepBack,
+  generationsPerSecond,
+  onSpeedChange,
+  zoom,
+  onZoomChange,
+  activeRuleKey,
+  onRuleChange,
+  accentColor,
+  onColorChange,
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -392,7 +492,8 @@ export function Sidebar({
   const closeTimerRef = useRef(null);
   const closeAnimTimerRef = useRef(null);
 
-  const speedIndex = SPEED_STEPS.findIndex((s) => s.gps === generationsPerSecond) ?? DEFAULT_SPEED_INDEX;
+  const speedIndex =
+    SPEED_STEPS.findIndex((s) => s.gps === generationsPerSecond) ?? DEFAULT_SPEED_INDEX;
   const zoomIndex = ZOOM_STEPS.indexOf(zoom) ?? DEFAULT_ZOOM_INDEX;
 
   const canSlower = speedIndex > 0;
@@ -401,8 +502,14 @@ export function Sidebar({
   const canZoomIn = zoomIndex < ZOOM_STEPS.length - 1;
 
   const handleMouseEnter = () => {
-    if (closeTimerRef.current) { clearTimeout(closeTimerRef.current); closeTimerRef.current = null; }
-    if (closeAnimTimerRef.current) { clearTimeout(closeAnimTimerRef.current); closeAnimTimerRef.current = null; }
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+    if (closeAnimTimerRef.current) {
+      clearTimeout(closeAnimTimerRef.current);
+      closeAnimTimerRef.current = null;
+    }
     setIsClosing(false);
     setIsExpanded(true);
   };
@@ -439,17 +546,25 @@ export function Sidebar({
   const stepFwdClass = [
     styles.iconBtn,
     isRunning ? (stepFwdHovered ? styles.stepBtnHint : styles.stepBtnDimmed) : '',
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
   const stepBackClass = [
     styles.iconBtn,
     isRunning ? (stepBackHovered ? styles.stepBtnHint : styles.stepBtnDimmed) : '',
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <>
       {/* Hover trigger zone — only active when sidebar is collapsed */}
       {!isExpanded && (
-        <div className={styles.hoverZone} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
+        <div
+          className={styles.hoverZone}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        />
       )}
 
       {/* Sidebar panel */}
@@ -461,7 +576,11 @@ export function Sidebar({
         {/* Header */}
         <div className={styles.header}>
           <span className={styles.logoTitle}>Emergence</span>
-          <button className={styles.menuBtn} onClick={() => setIsExpanded((v) => !v)} aria-label={isExpanded ? 'Collapse' : 'Expand'}>
+          <button
+            className={styles.menuBtn}
+            onClick={() => setIsExpanded((v) => !v)}
+            aria-label={isExpanded ? 'Collapse' : 'Expand'}
+          >
             <MenuToggle isExpanded={isExpanded} />
           </button>
         </div>
@@ -469,23 +588,51 @@ export function Sidebar({
         {/* Expanded sections — kept in DOM during close animation */}
         {(isExpanded || isClosing) && (
           <div className={`${styles.sections} ${isClosing ? styles.sectionsClosing : ''}`}>
-
             {/* Zoom */}
             <Section title="Zoom" animIndex={0}>
               <div className={styles.tripleRow}>
-                <button className={styles.iconBtn} onClick={() => onZoomChange(ZOOM_STEPS[zoomIndex - 1])} disabled={!canZoomOut} aria-label="Zoom out"><IconMinus /></button>
-                <ResetLabel value={currentZoomLabel} defaultValue={defaultZoomLabel} onReset={() => onZoomChange(ZOOM_STEPS[DEFAULT_ZOOM_INDEX])} />
-                <button className={styles.iconBtn} onClick={() => onZoomChange(ZOOM_STEPS[zoomIndex + 1])} disabled={!canZoomIn} aria-label="Zoom in"><IconPlus /></button>
+                <button
+                  className={styles.iconBtn}
+                  onClick={() => onZoomChange(ZOOM_STEPS[zoomIndex - 1])}
+                  disabled={!canZoomOut}
+                  aria-label="Zoom out"
+                >
+                  <IconMinus />
+                </button>
+                <ResetLabel
+                  value={currentZoomLabel}
+                  defaultValue={defaultZoomLabel}
+                  onReset={() => onZoomChange(ZOOM_STEPS[DEFAULT_ZOOM_INDEX])}
+                />
+                <button
+                  className={styles.iconBtn}
+                  onClick={() => onZoomChange(ZOOM_STEPS[zoomIndex + 1])}
+                  disabled={!canZoomIn}
+                  aria-label="Zoom in"
+                >
+                  <IconPlus />
+                </button>
               </div>
             </Section>
 
             {/* Time */}
             <Section title="Time" animIndex={1}>
               <div className={styles.speedLabelRow}>
-                <ResetLabel value={currentSpeedLabel} defaultValue={defaultSpeedLabel} onReset={() => onSpeedChange(SPEED_STEPS[DEFAULT_SPEED_INDEX].gps)} />
+                <ResetLabel
+                  value={currentSpeedLabel}
+                  defaultValue={defaultSpeedLabel}
+                  onReset={() => onSpeedChange(SPEED_STEPS[DEFAULT_SPEED_INDEX].gps)}
+                />
               </div>
               <div className={styles.timeRow}>
-                <button className={styles.iconBtn} onClick={() => onSpeedChange(SPEED_STEPS[speedIndex - 1].gps)} disabled={!canSlower} aria-label="Slower"><IconSlower /></button>
+                <button
+                  className={styles.iconBtn}
+                  onClick={() => onSpeedChange(SPEED_STEPS[speedIndex - 1].gps)}
+                  disabled={!canSlower}
+                  aria-label="Slower"
+                >
+                  <IconSlower />
+                </button>
                 <button
                   className={stepBackClass}
                   onMouseEnter={() => setStepBackHovered(true)}
@@ -493,16 +640,33 @@ export function Sidebar({
                   onClick={handleStepBack}
                   disabled={!isRunning && !canStepBack}
                   aria-label="Step back"
-                >{stepBackIcon}</button>
-                <button className={`${styles.iconBtn} ${styles.iconBtnPrimary}`} onClick={onToggleRunning} aria-label={isRunning ? 'Pause' : 'Play'}>{isRunning ? <IconPause /> : <IconPlay />}</button>
+                >
+                  {stepBackIcon}
+                </button>
+                <button
+                  className={`${styles.iconBtn} ${styles.iconBtnPrimary}`}
+                  onClick={onToggleRunning}
+                  aria-label={isRunning ? 'Pause' : 'Play'}
+                >
+                  {isRunning ? <IconPause /> : <IconPlay />}
+                </button>
                 <button
                   className={stepFwdClass}
                   onMouseEnter={() => setStepFwdHovered(true)}
                   onMouseLeave={() => setStepFwdHovered(false)}
                   onClick={handleStepForward}
                   aria-label="Step forward"
-                >{stepFwdIcon}</button>
-                <button className={styles.iconBtn} onClick={() => onSpeedChange(SPEED_STEPS[speedIndex + 1].gps)} disabled={!canFaster} aria-label="Faster"><IconFaster /></button>
+                >
+                  {stepFwdIcon}
+                </button>
+                <button
+                  className={styles.iconBtn}
+                  onClick={() => onSpeedChange(SPEED_STEPS[speedIndex + 1].gps)}
+                  disabled={!canFaster}
+                  aria-label="Faster"
+                >
+                  <IconFaster />
+                </button>
               </div>
             </Section>
 
@@ -515,7 +679,9 @@ export function Sidebar({
                     className={`${styles.ruleBtn} ${activeRuleKey === key ? styles.ruleBtnActive : ''}`}
                     onClick={() => onRuleChange(key)}
                   >
-                    <span className={styles.ruleBtnIcon}><Icon /></span>
+                    <span className={styles.ruleBtnIcon}>
+                      <Icon />
+                    </span>
                     <span className={styles.ruleBtnContent}>
                       <span className={styles.ruleBtnLabel}>{label}</span>
                       <span className={styles.ruleBtnDesc}>{description}</span>
@@ -538,12 +704,16 @@ export function Sidebar({
                     title={label}
                   />
                 ))}
-                <button className={styles.swatchCustom} onClick={() => setShowColorPicker(true)} aria-label="Custom color" title="Custom color">
+                <button
+                  className={styles.swatchCustom}
+                  onClick={() => setShowColorPicker(true)}
+                  aria-label="Custom color"
+                  title="Custom color"
+                >
                   <IconPalette />
                 </button>
               </div>
             </Section>
-
           </div>
         )}
       </aside>

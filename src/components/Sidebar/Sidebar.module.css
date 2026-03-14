@@ -85,7 +85,9 @@
   color: var(--emergence-color-text-secondary);
   border-radius: 8px;
   cursor: pointer;
-  transition: background 120ms ease, color 120ms ease;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
   flex-shrink: 0;
 }
 
@@ -110,7 +112,9 @@
   justify-content: center;
   opacity: 0;
   transform: rotate(-30deg) scale(0.7);
-  transition: opacity 220ms ease, transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    opacity 220ms ease,
+    transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
   pointer-events: none;
 }
 
@@ -119,7 +123,10 @@
   transform: rotate(0deg) scale(1);
 }
 
-.menuToggle svg { width: 18px; height: 18px; }
+.menuToggle svg {
+  width: 18px;
+  height: 18px;
+}
 
 /* ── Sections ──────────────────────────────────────────────────────────────── */
 
@@ -133,7 +140,9 @@
   scrollbar-width: none;
 }
 
-.sections::-webkit-scrollbar { display: none; }
+.sections::-webkit-scrollbar {
+  display: none;
+}
 
 /* Close animation: collapse all sections together */
 .sections.sectionsClosing .section {
@@ -185,19 +194,30 @@
   background: rgba(255, 255, 255, 0.04);
   color: var(--emergence-color-text-primary);
   cursor: pointer;
-  transition: background 120ms ease, transform 80ms ease, opacity 120ms ease;
+  transition:
+    background 120ms ease,
+    transform 80ms ease,
+    opacity 120ms ease;
   flex-shrink: 0;
 }
 
-.iconBtn svg { width: 16px; height: 16px; }
+.iconBtn svg {
+  width: 16px;
+  height: 16px;
+}
 
 .iconBtn:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.iconBtn:active:not(:disabled) { transform: scale(0.91); }
+.iconBtn:active:not(:disabled) {
+  transform: scale(0.91);
+}
 
-.iconBtn:disabled { opacity: 0.22; cursor: default; }
+.iconBtn:disabled {
+  opacity: 0.22;
+  cursor: default;
+}
 
 /* Play/Pause gets accent treatment */
 .iconBtnPrimary {
@@ -237,11 +257,19 @@
   color: var(--emergence-color-text-secondary);
   border-radius: 6px;
   cursor: pointer;
-  transition: background 120ms ease, color 120ms ease;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
 }
 
-.iconBtnSm:hover { background: rgba(255,255,255,0.07); color: var(--emergence-color-text-primary); }
-.iconBtnSm svg { width: 14px; height: 14px; }
+.iconBtnSm:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--emergence-color-text-primary);
+}
+.iconBtnSm svg {
+  width: 14px;
+  height: 14px;
+}
 
 /* ── Zoom row ──────────────────────────────────────────────────────────────── */
 
@@ -326,7 +354,9 @@
   cursor: pointer;
   text-align: left;
   min-height: 56px;
-  transition: background 120ms ease, color 120ms ease;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
 }
 
 .ruleBtn:hover:not(.ruleBtnActive) {
@@ -340,8 +370,15 @@
   color: var(--emergence-color-text-primary);
 }
 
-.ruleBtnIcon { width: 26px; height: 26px; flex-shrink: 0; }
-.ruleBtnIcon svg { width: 26px; height: 26px; }
+.ruleBtnIcon {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+.ruleBtnIcon svg {
+  width: 26px;
+  height: 26px;
+}
 
 .ruleBtnContent {
   display: flex;
@@ -380,13 +417,19 @@
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
-  transition: transform 120ms ease, box-shadow 120ms ease;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
 }
 
-.swatch:hover { transform: scale(1.07); }
+.swatch:hover {
+  transform: scale(1.07);
+}
 
 .swatchActive {
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8), 0 0 0 4px rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.8),
+    0 0 0 4px rgba(255, 255, 255, 0.15);
 }
 
 .swatchCustom {
@@ -401,7 +444,9 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: background 120ms ease, color 120ms ease;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
 }
 
 .swatchCustom:hover {
@@ -409,7 +454,10 @@
   color: var(--emergence-color-text-primary);
 }
 
-.swatchCustom svg { width: 20px; height: 20px; }
+.swatchCustom svg {
+  width: 20px;
+  height: 20px;
+}
 
 /* ── HSB Color Picker Overlay ──────────────────────────────────────────────── */
 
@@ -518,12 +566,16 @@
   border-radius: 4px;
   background: #fff;
   border: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.35);
   cursor: pointer;
   transition: transform 100ms ease;
 }
 
-.hsbSlider::-webkit-slider-thumb:hover { transform: scaleX(1.15); }
+.hsbSlider::-webkit-slider-thumb:hover {
+  transform: scaleX(1.15);
+}
 
 .hsbSlider::-moz-range-thumb {
   width: 14px;
@@ -535,8 +587,14 @@
   cursor: pointer;
 }
 
-.hsbSlider::-webkit-slider-runnable-track { background: transparent; }
-.hsbSlider::-moz-range-track { background: transparent; height: 16px; border-radius: 6px; }
+.hsbSlider::-webkit-slider-runnable-track {
+  background: transparent;
+}
+.hsbSlider::-moz-range-track {
+  background: transparent;
+  height: 16px;
+  border-radius: 6px;
+}
 
 /* ── Hex input ─────────────────────────────────────────────────────────────── */
 
@@ -581,7 +639,9 @@
 }
 
 /* Error color only shown when not focused (to avoid looking like a live error while typing) */
-.hexInputError:not(:focus) { color: rgba(255, 100, 100, 0.8); }
+.hexInputError:not(:focus) {
+  color: rgba(255, 100, 100, 0.8);
+}
 
 /* ── Apply button ──────────────────────────────────────────────────────────── */
 
@@ -595,7 +655,10 @@
   font-weight: 500;
   letter-spacing: 0.06em;
   cursor: pointer;
-  transition: background 120ms ease, color 120ms ease, transform 80ms ease;
+  transition:
+    background 120ms ease,
+    color 120ms ease,
+    transform 80ms ease;
 }
 
 .applyBtn:hover {
@@ -603,4 +666,6 @@
   color: var(--apply-hover-text, var(--emergence-color-text-primary));
 }
 
-.applyBtn:active { transform: scale(0.97); }
+.applyBtn:active {
+  transform: scale(0.97);
+}

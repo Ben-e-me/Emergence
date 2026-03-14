@@ -26,14 +26,20 @@ export function LifeCanvas({ grid, ages, width, height, cellSizeCss, accentColor
   const zoomRef = useRef(zoom);
   const tileRef = useRef(/** @type {HTMLCanvasElement | null} */ (null));
 
-  useEffect(() => { zoomRef.current = zoom; });
+  useEffect(() => {
+    zoomRef.current = zoom;
+  });
 
   useEffect(() => {
     const onMove = (e) => {
       if (!isDragging.current) return;
       const dx = e.clientX - dragStart.current.x;
       const dy = e.clientY - dragStart.current.y;
-      setPanState({ x: dragStart.current.panX + dx, y: dragStart.current.panY + dy, forZoom: zoomRef.current });
+      setPanState({
+        x: dragStart.current.panX + dx,
+        y: dragStart.current.panY + dy,
+        forZoom: zoomRef.current,
+      });
     };
     const onUp = () => {
       if (!isDragging.current) return;

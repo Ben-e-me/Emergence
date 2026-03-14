@@ -129,7 +129,10 @@ export function useGameOfLife(options = {}) {
       const elapsed = now - lastStepTimeRef.current;
       if (elapsed >= targetDeltaMs) {
         saveSnapshot();
-        const count = Math.min(MAX_STEPS_PER_FRAME, Math.max(1, Math.floor(elapsed / targetDeltaMs)));
+        const count = Math.min(
+          MAX_STEPS_PER_FRAME,
+          Math.max(1, Math.floor(elapsed / targetDeltaMs)),
+        );
         for (let i = 0; i < count; i += 1) advance();
         setGridView(frontUniverseRef.current.grid);
         setAgesView(frontUniverseRef.current.ages);
@@ -147,5 +150,14 @@ export function useGameOfLife(options = {}) {
     };
   }, [advance, isRunning, saveSnapshot, targetDeltaMs]);
 
-  return { grid: gridView, ages: agesView, isRunning, historyLength, step, stepBack, toggleRunning, reset };
+  return {
+    grid: gridView,
+    ages: agesView,
+    isRunning,
+    historyLength,
+    step,
+    stepBack,
+    toggleRunning,
+    reset,
+  };
 }
