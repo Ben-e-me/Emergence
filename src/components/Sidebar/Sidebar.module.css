@@ -1,0 +1,606 @@
+/**
+ * @file Sidebar.module.css
+ * @description Styles for the hover-triggered control sidebar.
+ */
+
+/* ── Section animations ──────────────────────────────────────────────────────── */
+
+@keyframes sectionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sectionHide {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+/* ── Hover trigger zone ────────────────────────────────────────────────────── */
+
+/* Active only when sidebar is collapsed — covers the header area + 64px buffer */
+.hoverZone {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 340px;
+  height: 134px;
+  z-index: 99;
+}
+
+/* ── Sidebar panel ─────────────────────────────────────────────────────────── */
+
+.sidebar {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+  width: 256px;
+  border-radius: 14px;
+  background: rgba(28, 22, 50, 0.42);
+  backdrop-filter: blur(32px) saturate(1.8);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+/* ── Header ────────────────────────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px 0 14px;
+  height: 50px;
+}
+
+.logoTitle {
+  font-family: var(--emergence-font-family-mono);
+  font-size: 1.07rem;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--emergence-color-text-primary);
+}
+
+.menuBtn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--emergence-color-text-secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+  flex-shrink: 0;
+}
+
+.menuBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--emergence-color-text-primary);
+}
+
+/* Animated burger ↔ close toggle */
+.menuToggle {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.menuToggleFrame {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: rotate(-30deg) scale(0.7);
+  transition: opacity 220ms ease, transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+.menuToggleActive {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.menuToggle svg { width: 18px; height: 18px; }
+
+/* ── Sections ──────────────────────────────────────────────────────────────── */
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0 8px 20px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.sections::-webkit-scrollbar { display: none; }
+
+/* Close animation: collapse all sections together */
+.sections.sectionsClosing .section {
+  animation: sectionHide 340ms cubic-bezier(0.4, 0, 0.8, 1) forwards;
+  animation-delay: 0ms;
+}
+
+/* ── Section ───────────────────────────────────────────────────────────────── */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: sectionReveal 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--anim-index, 0) * 160ms);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sectionLine {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.sectionTitle {
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: hsl(0, 0%, 36%);
+  white-space: nowrap;
+}
+
+/* ── Icon buttons ──────────────────────────────────────────────────────────── */
+
+.iconBtn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--emergence-color-text-primary);
+  cursor: pointer;
+  transition: background 120ms ease, transform 80ms ease, opacity 120ms ease;
+  flex-shrink: 0;
+}
+
+.iconBtn svg { width: 16px; height: 16px; }
+
+.iconBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.iconBtn:active:not(:disabled) { transform: scale(0.91); }
+
+.iconBtn:disabled { opacity: 0.22; cursor: default; }
+
+/* Play/Pause gets accent treatment */
+.iconBtnPrimary {
+  background: rgba(var(--emergence-accent-rgb, 123, 97, 255), 0.18);
+  color: var(--emergence-color-accent);
+}
+
+.iconBtnPrimary:hover:not(:disabled) {
+  background: rgba(var(--emergence-accent-rgb, 123, 97, 255), 0.28);
+}
+
+/* Step buttons while simulation is running: dimmed, hoverable pause hint */
+.stepBtnDimmed {
+  opacity: 0.28;
+  cursor: pointer;
+}
+
+.stepBtnDimmed:hover {
+  opacity: 0.5;
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+
+.stepBtnHint {
+  opacity: 0.5;
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* Small icon button for overlay close */
+.iconBtnSm {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--emergence-color-text-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.iconBtnSm:hover { background: rgba(255,255,255,0.07); color: var(--emergence-color-text-primary); }
+.iconBtnSm svg { width: 14px; height: 14px; }
+
+/* ── Zoom row ──────────────────────────────────────────────────────────────── */
+
+.tripleRow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.tripleRow .iconBtn {
+  width: 100%;
+}
+
+/* ── Time section ──────────────────────────────────────────────────────────── */
+
+.speedLabelRow {
+  display: flex;
+  justify-content: center;
+}
+
+.timeRow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+}
+
+.timeRow .iconBtn {
+  width: 100%;
+}
+
+/* ── Value label with hover-to-reset ─────────────────────────────────────── */
+
+.resetLabel {
+  flex: 1;
+  text-align: center;
+  font-family: var(--emergence-font-family-mono);
+  font-size: 0.82rem;
+  color: var(--emergence-color-accent);
+  letter-spacing: 0.05em;
+  min-width: 48px;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+
+.resetBtn {
+  font-family: var(--emergence-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--emergence-color-text-secondary);
+  border: none;
+  border-radius: 6px;
+  background: rgba(28, 22, 50, 0.5);
+  backdrop-filter: blur(24px);
+  padding: 5px 10px;
+  min-height: 26px;
+  cursor: pointer;
+  white-space: nowrap;
+  /* No hover state — button appearance is static */
+}
+
+/* ── Rule section ──────────────────────────────────────────────────────────── */
+
+.ruleList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.ruleBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--emergence-color-text-secondary);
+  cursor: pointer;
+  text-align: left;
+  min-height: 56px;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.ruleBtn:hover:not(.ruleBtnActive) {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--emergence-color-text-primary);
+}
+
+.ruleBtnActive {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--emergence-color-accent);
+  color: var(--emergence-color-text-primary);
+}
+
+.ruleBtnIcon { width: 26px; height: 26px; flex-shrink: 0; }
+.ruleBtnIcon svg { width: 26px; height: 26px; }
+
+.ruleBtnContent {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.ruleBtnLabel {
+  font-size: 0.86rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.ruleBtnDesc {
+  font-size: 0.73rem;
+  color: var(--emergence-color-text-secondary);
+  line-height: 1.35;
+}
+
+/* ── Color section ─────────────────────────────────────────────────────────── */
+
+.swatchRow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  align-items: center;
+}
+
+.swatch {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  border: none;
+  background: var(--swatch-color);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.swatch:hover { transform: scale(1.07); }
+
+.swatchActive {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8), 0 0 0 4px rgba(255, 255, 255, 0.15);
+}
+
+.swatchCustom {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--emergence-color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.swatchCustom:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--emergence-color-text-primary);
+}
+
+.swatchCustom svg { width: 20px; height: 20px; }
+
+/* ── HSB Color Picker Overlay ──────────────────────────────────────────────── */
+
+.overlayBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlayPanel {
+  width: 300px;
+  border-radius: 18px;
+  background: rgba(16, 12, 30, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.8),
+    0 8px 24px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.overlayHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.overlayTitle {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: hsl(0, 0%, 40%);
+}
+
+/* Color preview rectangle — near-square */
+.colorPreview {
+  width: 100%;
+  height: 120px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 60ms ease;
+}
+
+/* ── HSB Sliders ───────────────────────────────────────────────────────────── */
+
+.sliderGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sliderLabel {
+  font-size: 0.67rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: hsl(0, 0%, 38%);
+}
+
+/* Wrapper: provides the 48px interaction height; track floats inside */
+.sliderWrapper {
+  position: relative;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+/* Track: gradient bg, 16px tall, sits centered in the wrapper */
+.sliderTrack {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 16px;
+  border-radius: 6px;
+  background: var(--track-bg);
+  pointer-events: none;
+}
+
+.hsbSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 48px;
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
+/* Tall rectangular thumb — 14px wide, 48px tall, extends above/below track */
+.hsbSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 48px;
+  border-radius: 4px;
+  background: #fff;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: transform 100ms ease;
+}
+
+.hsbSlider::-webkit-slider-thumb:hover { transform: scaleX(1.15); }
+
+.hsbSlider::-moz-range-thumb {
+  width: 14px;
+  height: 48px;
+  border-radius: 4px;
+  background: #fff;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.hsbSlider::-webkit-slider-runnable-track { background: transparent; }
+.hsbSlider::-moz-range-track { background: transparent; height: 16px; border-radius: 6px; }
+
+/* ── Hex input ─────────────────────────────────────────────────────────────── */
+
+.hexRow {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  height: 44px;
+  overflow: hidden;
+}
+
+.hexHash {
+  padding: 0 6px 0 14px;
+  font-family: var(--emergence-font-family-mono);
+  font-size: 0.88rem;
+  color: var(--emergence-color-text-secondary);
+}
+
+.hexInput {
+  flex: 1;
+  height: 100%;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.35);
+  font-family: var(--emergence-font-family-mono);
+  font-size: 0.88rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  outline: none;
+  padding: 0 14px 0 0;
+  caret-color: #ffffff;
+}
+
+.hexInput:focus {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.hexInput::placeholder {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+/* Error color only shown when not focused (to avoid looking like a live error while typing) */
+.hexInputError:not(:focus) { color: rgba(255, 100, 100, 0.8); }
+
+/* ── Apply button ──────────────────────────────────────────────────────────── */
+
+.applyBtn {
+  height: 44px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--emergence-color-text-primary);
+  font-size: 0.84rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease, transform 80ms ease;
+}
+
+.applyBtn:hover {
+  background: var(--apply-hover-bg, rgba(255, 255, 255, 0.16));
+  color: var(--apply-hover-text, var(--emergence-color-text-primary));
+}
+
+.applyBtn:active { transform: scale(0.97); }
